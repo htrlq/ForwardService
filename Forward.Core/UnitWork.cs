@@ -14,6 +14,7 @@ namespace Forward.Core
             func(ServiceCollection);
 
             ServiceCollection.AddSingleton<IForwardFactory, ForwardFactory>();
+            ServiceCollection.AddSingleton<SubscribeBuilder>();
 
             return ServiceCollection;
         }

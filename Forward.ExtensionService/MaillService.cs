@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Forward.ExtensionService
 {
-    public class MaillService : IForwardService
+    public class MaillService : AbstractPublishService
     {
         private string userName = "2598145226@qq.com";
-        private string pawssword = "略略略";
+        private string pawssword = "dobjwhiwmxmfdhih";
         private string _host = "smtp.qq.com";
 
         [ParamType(typeof(MaillModel))]
-        public async Task<object> ExecuteAsync(object param)
+        public override async Task<object> ExecuteAsync(object param)
         {
             MaillModel maillModel = param as MaillModel;
 
@@ -40,12 +40,5 @@ namespace Forward.ExtensionService
 
             return true;
         }
-    }
-
-    internal class MaillModel
-    {
-        public string ToMail { get; set; }
-        public string Subject { get; set; }
-        public string Body { get; set; }
     }
 }

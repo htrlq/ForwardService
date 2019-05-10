@@ -6,6 +6,7 @@ using Forward.ExtensionService;
 using Microsoft.Extensions.DependencyInjection;
 
 using System;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace Forward.Service
@@ -19,6 +20,7 @@ namespace Forward.Service
                 services.AddScoped<Forward.Core.Forward>();
 
                 services.AddSingleton<MaillService>();
+                services.AddSingleton<OrderService>();
 
                 services.AddSingleton(typeof(IConfig), (serviceProvider)=>
                 {
@@ -28,6 +30,28 @@ namespace Forward.Service
                 });
             });
             UnitWork.Instance.Builder();
+
+            var subscribe = new SubscribeService();
+
+            subscribe.AddService<MaillService, OrderService>((response) =>
+            {
+                if (response is bool checkResponse)
+                {
+                    if (checkResponse)
+                    {
+                        return new OrderModel
+                        {
+                            Title = "Subscribe and Create Order",
+                            PayMoney = 1,
+                            CreateTime = DateTime.Now
+                        };
+                    }
+                }
+
+                return null;
+            });
+
+            DiagnosticListener.AllListeners.Subscribe(subscribe);
 
             var mApiServer = new HttpApiServer();
             mApiServer.ActionFactory.ControllerInstance += (o, e) =>

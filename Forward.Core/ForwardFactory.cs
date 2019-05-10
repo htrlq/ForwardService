@@ -27,7 +27,14 @@ namespace Forward.Core
 
                 var entry = JsonConvert.DeserializeObject(json, paramType);
 
-                return await service.ExecuteAsync(entry);
+                if (service is AbstractPublishService publishService)
+                {
+                    return await publishService.PublishAsync(entry);
+                }
+                else
+                {
+                    return await service.ExecuteAsync(entry);
+                }
             }
 
             throw new Exception("Service Not Register");
