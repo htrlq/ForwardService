@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Forward.Core.Core.Excpetion;
+using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace Forward.Core
                 }
             }
 
-            throw new Exception("Service Not Register");
+            throw new ServiceNotRegister("Service Not Register");
         }
     }
 }

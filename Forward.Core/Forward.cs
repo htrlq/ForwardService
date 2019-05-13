@@ -1,5 +1,6 @@
 ﻿using BeetleX.FastHttpApi;
 using BeetleX.FastHttpApi.Data;
+using Forward.Core.Filter;
 using System;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace Forward.Core
 
         [Post(Route = "{url}")]
         [NoDataConvert]
+        [Retry(5)]
         public async Task<ResponseModel> Service(string url,IHttpContext context)
         {
             var result = new ResponseModel()
@@ -24,20 +26,12 @@ namespace Forward.Core
                 RequestTime = DateTime.Now
             };
 
-            try
-            {
-                var json = context.Request.Stream.ReadString(context.Request.Length);
+            var json = context.Request.Stream.ReadString(context.Request.Length);
 
-                result.Data = await ForwardFactory.ForwardAsync(url, json);
-                result.ResponseTime = DateTime.Now;
+            result.Data = await ForwardFactory.ForwardAsync(url, json);
+            result.ResponseTime = DateTime.Now;
 
-                result.IsSuccessFul = true;
-            }
-            catch(Exception ex)
-            {
-                result.ResponseTime = DateTime.Now;
-                result.Data = ex.ToString();
-            }
+            result.IsSuccessFul = true;
 
             return result;
         }

@@ -18,7 +18,7 @@ namespace Forward.Core
         {
             var array = Dictionary.ToArray();
             
-            if (array.Any(_keyPair=> Regex.IsMatch(value,_keyPair.Key)))
+            if (array.Any(_keyPair=> value.Equals(_keyPair.Key)))
             {
                 var type = array.FirstOrDefault(_keyPair => Regex.IsMatch(value, _keyPair.Key)).Value;
 
